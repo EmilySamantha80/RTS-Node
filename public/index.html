@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="en-us" role="main">
+    <head runat="server">
+        <title>Merwin's Ringtone Search</title>
+        <meta name="description" content="Your source for old-school nokia RTTTL ringtones" />
+        <meta name="keywords" content="ringtone,nokia,rtttl,midi" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="favicon.ico" type="image/x-icon" /> 
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /> 
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="styles/application.css" />
+        <link rel="stylesheet" type="text/css" href="styles/bootstrap-overrides.css" />
+        <link rel="stylesheet" type="text/css" href="styles/rts.css" />
+        <script src="JZZ/JZZ.js"></script>
+        <script src="JZZ/JZZ.midi.SMF.js"></script>
+        <script src="JZZ/JZZ.synth.Tiny.js"></script>
+        <script src="JZZ/JZZ.gui.Player.js"></script>
+        <script src="rts.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-116766922-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-116766922-1');
+        </script>
+    </head>
+    <body>
+        <a href="#searchText" class="sr-only">Skip to main content</a>
+        <div class="container">
+            <div class="row" style="margin-bottom:15px;">
+                <div class="col-sm-12" style="text-align:center">
+                    <a href="."><img src="images/logo.png" width="696" height="75" class="img-fluid" style="display:block;margin:auto;" alt="Merwin's Ringtone Search logo" /></a>
+                        <h1 style="font-size:1.5em;margin-top:0px;">Your source for old-school Nokia RTTTL ringtones</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-1 col-xl-2"></div>
+                <div class="col-md-12 col-lg-10 col-xl-8">
+                    <div class="card">
+                        <div class="card-header card-header-grey">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-8 col-md-9 searchInput">
+                                    <label class="sr-only" for="searchText">Search ringtones</label>
+                                    <input id="searchText" class="form-control" style="width:100%;" />
+                                </div>
+                                <div class="col-xs-4 col-sm-4 col-md-3 searchButton" style="padding-left:10px;padding-right:10px;">
+                                    <input id="searchButton" type="submit" style="width:100%" class="btn btn-primary" onclick="doSearch(); return false;" value="Search Tones">
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-sm-12">
+                                    <a href="?convert=midi">Convert your own RTTTL to MIDI</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding-top:5px;display:none;" id="categoryContainer">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="categoriesHeader categoriesHeaderLeft">Ringtone Categories</div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="categoriesHeader categoriesHeaderRight">Total Ringtones: <span id="totalRingtones"></span></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div id="categories"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!---------------------->
+            <div class="row" style="display:none" id="convertContainer">
+                <div class="col-lg-1 col-xl-2"></div>
+                <div class="col-md-12 col-lg-10 col-xl-8">
+                    <div class="card">
+                        <div class="card-header card-header-blue">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h2>Convert your own RTTTL to MIDI</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="rtttlText" class="bold">RTTTL Text</label><br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <textarea id="rtttlText" class="form-control" style="height:100px;width:100%;"></textarea>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:5px;">
+                                <div class="col-sm-12">
+                                    <a href="javascript:;" onclick="convertRtttlToMidi($('#rtttlText').val());" class="btn btn-primary">Convert to MIDI</a>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px;" runat="server" id="errorDiv" visible="false">
+                                <div class="col-sm-12">
+                                    <span style="font-weight:600" class="color-red" id="errorMessage" role="alert" aria-live="assertive"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!---------------------->
+            <div class="row" style="display:none" id="toneDetail">
+                <div class="col-lg-1 col-xl-2"></div>
+                <div class="col-md-12 col-lg-10 col-xl-8">
+                    <div class="card">
+                        <div class="card-header card-header-blue">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h2><span id="detailTitle"></span></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row form-group">
+                                <div class="col-md-3 col-xl-2 bold text-md-right">Views:</div>
+                                <div class="col-md-9 col-xl-10">
+                                    <div id="detailViews" aria-label="Views"></div>
+                                </div>
+                                <div class="col-md-3 col-xl-2 bold text-md-right">Preview:</div>
+                                <div class="col-md-9 col-xl-10">
+                                    <div id="player"></div>
+                                </div>
+                                <div class="col-md-3 col-xl-2 bold text-md-right">Download:</div>
+                                <div class="col-md-9 col-xl-10">
+                                    <div id="detailDownload" aria-label="Download"></div>
+                                </div>
+                                <div class="col-md-3 col-xl-2 bold text-md-right">RTTTL:</div>
+                                <div class="col-md-9 col-xl-10" style="word-wrap:break-word;">
+                                    <div id="detailRtttl" aria-label="RTTTL"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!---------------------->
+            <div class="row" style="display:none;" id="toneListContainer">
+                <div class="col-lg-1 col-xl-2"></div>
+                <div class="col-md-12 col-lg-10 col-xl-8">
+                    <div class="card">
+                        <div class="card-header card-header-blue resultsPanelHeading">
+                            <div class="row">
+                                <div class="col-md-6 resultsHeader">
+                                    <label id="categoryTitle"></label>
+                                </div>
+                                <div class="col-md-6 text-md-right resultsHeader" runat="server" id="SearchCountDiv">
+                                    <div><label id="searchCount">Found <span id="toneCount"></span> ringtones</label></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding:0px;">
+                            <table class="table table-sm table-striped" style="margin:0px;">
+                                <thead id="toneHead">
+                                    <tr class="thead-dark" style="border:0;">
+                                        <th style="border-color:#265A87;">Artist</th>
+                                        <th style="border-color:#265A87;">Title</th>
+                                        <th style="border-color:#265A87;text-align:center;">Views</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!---------------------->
+            <div class="row" style="margin-top:15px;">
+                <div class="col-lg-1 col-xl-2"></div>
+                <div class="col-md-12 col-lg-10 col-xl-8">
+                    <div class="footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span id="footerProductName">Merwin's Ringtone Search</span><br />
+                                <span id="footerCopyright">(c)2000-2024</span>&nbsp;<a href="mailto:emilysamantha80@gmail.com">Emily Johnson</a><br />
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                                <span>Counting since <span id="countingSince"></span></span><br />
+                                <span>Total Page Views: <span id="totalPageViews"></span></span><br />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a href="http://vulc.in">Vulc.in</a>
+                            </div>
+                            <div class="col-md-3 text-md-center text-lg-center">
+                                <a href="http://pong.vulc.in">ESH Pong</a>
+                            </div>
+                            <div class="col-md-3 text-md-center text-lg-center">
+                                <a href="https://pastebin.com/u/EmilySamantha80">Pastebin</a>
+                            </div>
+                            <div class="col-md-3 text-md-right text-lg-right">
+                                <a href="https://github.com/EmilySamantha80">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <br />
+    </body>
+</html>

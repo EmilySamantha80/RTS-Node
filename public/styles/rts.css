@@ -1,0 +1,138 @@
+﻿.subTitle {
+    font-size:1.5em;
+}
+.categoryLink {
+    margin-right: 10px;
+    white-space: nowrap;
+}
+.resultsPanelHeading {
+    border: 0;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom: 0;
+    padding-top: 0px;
+    padding-bottom: 0
+}
+.resultsTableHeaderRow {
+    color: white;
+    background-color: #265A87;
+}
+.resultsTable {
+    margin: 0px;
+    border: none;
+}
+.footer {
+    background-color: #F5F5F5;
+    border: 1px solid #C9C9C9;
+    border-radius: 2px;
+    padding: 7px;
+}
+
+/* screen-xs */
+@media (max-width: 767px) {
+    .resultsHeaderLeft {
+        color: white;
+        background-color: #265A87;
+        padding: 0px;
+        padding-left: 10px;
+        border: 1px solid #265A87;
+    }
+
+    .resultsHeaderRight {
+        color: white;
+        background-color: #265A87;
+        padding: 0px;
+        padding-left: 10px;
+        border: 1px solid #265A87;
+    }
+}
+
+.resultsHeader {
+    font-size: 1.5em;
+    color: white;
+}
+
+.categoriesHeader {
+    font-size: 1.5em;
+    color: black;
+    margin-top: 0px;
+}
+
+/* screen-xs */
+@media (max-width: 767px) {
+    .resultsHeaderLeft {
+    }
+    .resultsHeaderRight {
+    }
+    .categoriesHeaderLeft {
+    }
+    .categoriesHeaderRight {
+    }
+    .searchInput {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .searchButton {
+        margin-top: 5px;
+    }
+}
+
+/* screen-sm */
+@media (min-width: 768px) and (max-width: 991px) {
+    .resultsHeaderLeft {
+    }
+    .resultsHeaderRight {
+        text-align: right;
+    }
+    .categoriesHeaderLeft {
+    }
+    .categoriesHeaderRight {
+        text-align:right;
+    }
+    .searchInput {
+        padding-left:10px;
+        padding-right:0px;
+    }
+    .searchButton {
+    }
+}
+
+/* screen-md */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .resultsHeaderLeft {
+    }
+    .resultsHeaderRight {
+        text-align: right;
+    }
+    .categoriesHeaderLeft {
+    }
+    .categoriesHeaderRight {
+        text-align:right;
+    }
+    .searchInput {
+        padding-left: 10px;
+        padding-right: 0px;
+    }
+    .searchButton {
+    }
+}
+
+/* screen-lg */
+@media (min-width: 1200px) {
+    .resultsHeaderLeft {
+    }
+    .resultsHeaderRight {
+        text-align:right;
+    }
+    .categoriesHeaderLeft {
+    }
+    .categoriesHeaderRight {
+        text-align: right;
+    }
+    .searchInput {
+        padding-left: 10px;
+        padding-right: 0px;
+    }
+    .searchButton {
+    }
+}

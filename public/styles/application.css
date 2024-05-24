@@ -1,0 +1,76 @@
+﻿html {
+    font-size: 14px;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.25em;
+}
+
+h3 {
+    font-size: 1.25em;
+}
+
+a {
+    color: blue;
+    background-color: transparent;
+}
+
+    a:visited {
+        color: blue;
+        background-color: transparent;
+    }
+
+    a:hover {
+        color: blue;
+        background-color: transparent;
+    }
+
+    a:active {
+        color: blue;
+        background-color: transparent;
+    }
+
+    a:focus {
+        color: blue;
+        background-color: transparent;
+    }
+
+.divLink {
+    color: blue;
+    background-color: transparent;
+}
+
+    .divLink:hover {
+        color: blue;
+        background-color: transparent;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+.color-blue {
+    color: #0000FF !important;
+}
+
+.color-green {
+    color: #006600 !important;
+}
+
+.color-red {
+    color: #B30000 !important;
+}
+
+.color-black {
+    color: black !important;
+}
+
+.color-white {
+    color: white !important;
+}
+
+.bold {
+    font-weight: bold;
+}
