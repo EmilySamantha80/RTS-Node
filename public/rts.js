@@ -3,7 +3,7 @@ var player
 
 function doSearch() {
     var s = document.getElementById('searchText').value;
-    window.location.href = '?search=' + encodeURI(s);
+    window.location.href = '?search=' + btoa(s);
 }
 
 function buildToneRow(tones) {
@@ -241,6 +241,7 @@ $(document).ready(function() {
         getCategoryInfo(category)
         getTones(category)    
     } else if (search != null && search != '') {
+        search = atob(search)
         if (search.length < 3) {
             $('#searchText').val(search)
             alert('Search term must be at least 3 characters')
