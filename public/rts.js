@@ -134,6 +134,7 @@ function getCategories() {
 }
 
 async function convertRtttlToMidi(rtttl) {
+    $('#errorMessage').text('')
     if(rtttl == null || rtttl.trim() == '') {
         alert('You must have something in the RTTTL to convert!')
         return
