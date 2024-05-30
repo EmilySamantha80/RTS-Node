@@ -30,60 +30,56 @@ function buildToneRow(tones) {
     return rows
 }
 
-function previewMidi(id) {
+async function previewMidi(id) {
     let url = `/rts/midi/${id}`
     
-    fetchMidi(url).then((response) => {
-        let midi = response
-        let smf = new JZZ.MIDI.SMF(midi);
-        player.load(smf);
-    })
+    let response = await fetchMidi(url)
+    let midi = response
+    let smf = new JZZ.MIDI.SMF(midi);
+    player.load(smf);
 }
 
-function getTone(id) {
+async function getTone(id) {
     let data = { }
     let url = `/rts/tones/${id}`
-    query(url, 'GET', data).then((response) => {
-        $('#detailTitle').text(`${response.Artist} - ${response.Title}`)
-        $('#detailViews').text(`${parseInt(response.Counter).toLocaleString()}`)
-        $('#detailDownload').html(`
-            <form id="midiDownload" method="get" action="/rts/midi/${response.ToneId}">
-                <a href="javascript:;" onclick="$('#midiDownload').submit()">MIDI</a>
-            </form>
-        `)
-        $('#detailRtttl').text(response.Rtttl)
-        document.title = `${document.title} (${response.Artist} - ${response.Title})`
-        previewMidi(response.ToneId)
-        $('#toneDetail').show()
-    })
+    let response = await query(url, 'GET', data)
+    $('#detailTitle').text(`${response.Artist} - ${response.Title}`)
+    $('#detailViews').text(`${parseInt(response.Counter).toLocaleString()}`)
+    $('#detailDownload').html(`
+        <form id="midiDownload" method="get" action="/rts/midi/${response.ToneId}">
+            <a href="javascript:;" onclick="$('#midiDownload').submit()">MIDI</a>
+        </form>
+    `)
+    $('#detailRtttl').text(response.Rtttl)
+    document.title = `${document.title} (${response.Artist} - ${response.Title})`
+    await previewMidi(response.ToneId)
+    $('#toneDetail').show()
 }
 
-function getToneCount() {
+async function getToneCount() {
     let data = { }
     let url = `/rts/tonecount`
-    query(url, 'GET', data).then((response) => {
-        $('#totalRingtones').text(`${parseInt(response.ToneCount).toLocaleString()}`)
-    })
+    let response = await query(url, 'GET', data)
+    $('#totalRingtones').text(`${parseInt(response.ToneCount).toLocaleString()}`)
 }
 
-function getStats() {
+async function getStats() {
     let data = { }
     let url = `/rts/stats`
-    query(url, 'GET', data).then((response) => {
-        response.forEach(function (value, index) {
-            let name = value.StatName.toUpperCase()
-            if (name == 'COUNTINGSINCE') {
-                let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                let date = new Date(value.StatValue)
-                $('#countingSince').text(date.toLocaleDateString("en-US", options))
-            } else if (name == 'PAGEVIEWS') {
-                $('#totalPageViews').text(parseInt(value.StatValue).toLocaleString())
-            }
-        })
+    let response = await query(url, 'GET', data)
+    response.forEach(function (value, index) {
+        let name = value.StatName.toUpperCase()
+        if (name == 'COUNTINGSINCE') {
+            let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            let date = new Date(value.StatValue)
+            $('#countingSince').text(date.toLocaleDateString("en-US", options))
+        } else if (name == 'PAGEVIEWS') {
+            $('#totalPageViews').text(parseInt(value.StatValue).toLocaleString())
+        }
     })
 }
 
-function getTones(category) {
+async function getTones(category) {
     let data = { }
     let url = ''
     if (category == null || category == '') {
@@ -91,46 +87,42 @@ function getTones(category) {
     } else {
         url = `/rts/browse/${category}`
     }
-    query(url, 'GET', data).then((response) => {
-        $("#toneHead").after(buildToneRow(response))
-        $("#toneCount").text(response.length)
-        $('#toneListContainer').show()
-    });
+    let response = await query(url, 'GET', data)
+    $("#toneHead").after(buildToneRow(response))
+    $("#toneCount").text(response.length)
+    $('#toneListContainer').show()
 }
 
-function searchTones(search) {
+async function searchTones(search) {
     let data = { }
     let url = `/rts/search/${search}`
-    query(url, 'GET', data).then((response) => {
-        $('#categoryTitle').text(`Search results: ${search}`)
-        $("#toneHead").after(buildToneRow(response))
-        $("#toneCount").text(response.length)
-        $('#toneListContainer').show()
-    });
+    let response = await query(url, 'GET', data)
+    $('#categoryTitle').text(`Search results: ${search}`)
+    $("#toneHead").after(buildToneRow(response))
+    $("#toneCount").text(response.length)
+    $('#toneListContainer').show()
 }
 
-function getCategoryInfo(category) {
+async function getCategoryInfo(category) {
     if (category == null || category == '') {
         $('#categoryTitle').text(`Top 20 ringtones`)
     } else {
         let data = { }
-        query(`/rts/categories/${category}`, 'GET', data).then((response) => {
-            $('#categoryTitle').text(`Category: ${response.CategoryName}`)
-        });    
+        response = await query(`/rts/categories/${category}`, 'GET', data)
+        $('#categoryTitle').text(`Category: ${response.CategoryName}`)
     }
 }
 
-function getCategories() {
+async function getCategories() {
     let data = { }
-    query('/rts/categories', 'GET', data).then((response) => {
-        let link = `<a class='categoryLink' href='.'>Top 20</a>`
+    let response = await query('/rts/categories', 'GET', data)
+    let link = `<a class='categoryLink' href='.'>Top 20</a>`
+    $("#categories").append(link)
+    response.forEach(function (value, index) {
+        let link = `<a class='categoryLink' href='?category=${value.CategoryCode}'>${value.CategoryName}</a>`
         $("#categories").append(link)
-        response.forEach(function (value, index) {
-            let link = `<a class='categoryLink' href='?category=${value.CategoryCode}'>${value.CategoryName}</a>`
-            $("#categories").append(link)
-        })
-        $('#categoryContainer').show()
-    });
+    })
+    $('#categoryContainer').show()
 }
 
 async function convertRtttlToMidi(rtttl) {
@@ -212,13 +204,7 @@ async function query(url, method, data) {
     return result;
 }
 
-$(document).ready(function() {
-    $('#searchText').focus()
-    $('#searchText').keypress(function(e){
-        if(e.keyCode==13)
-        $('#searchButton').click()
-    })
-
+async function setUpPage() {
     getStats()
     getToneCount()
     getCategories()
@@ -229,9 +215,9 @@ $(document).ready(function() {
     let toneId = urlParams.get('toneid')
 
     if (toneId != null && toneId != '') {
-        getTone(toneId)
-        JZZ.synth.Tiny.register('Web Audio');
         player = new JZZ.gui.Player({at: 'player', midi: false, file: false });    
+        JZZ.synth.Tiny.register('Web Audio');
+        await getTone(toneId)
     }
 
     if (convert != null && convert != '') {
@@ -240,17 +226,29 @@ $(document).ready(function() {
         $('#rtttlText').val(defaultRtttl)
     } else if (category != null && category != '') {
         getCategoryInfo(category)
-        getTones(category)    
+        await getTones(category)    
     } else if (search != null && search != '') {
         search = atob(search)
         if (search.length < 3) {
             $('#searchText').val(search)
             alert('Search term must be at least 3 characters')
         } else {
-            searchTones(search)
+            await searchTones(search)
         }
     } else {
         getCategoryInfo()
-        getTones() 
+        await getTones() 
     }
+}
+
+$(document).ready(function() {
+    $('#searchText').focus()
+    $('#searchText').keypress(function(e){
+        if(e.keyCode==13)
+        $('#searchButton').click()
+    })
+
+    setUpPage().then(() => {
+       $("#spinnerContainer").hide()
+    })
 });
