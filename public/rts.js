@@ -11,11 +11,10 @@ function buildToneRow(tones) {
     tones.forEach(function (value, index) {
         let search = urlParams.get('search') ?? ''
         let category = urlParams.get('category') ?? ''
-        let artistUriEnc = encodeURIComponent(value.Artist)
         let row = `
         <tr>
             <td>
-                <a href="?search=${artistUriEnc}">${value.Artist}</a>
+                <a href="?search=${btoa(value.Artist)}">${value.Artist}</a>
             </td>
             <td>
                 <a href="?toneid=${value.ToneId}&search=${search}&category=${category}">${value.Title}</a>
