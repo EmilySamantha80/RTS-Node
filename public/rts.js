@@ -125,6 +125,9 @@ async function getCategories() {
 }
 
 async function convertRtttlToMidi(rtttl) {
+    $('#convertResults').hide()
+    $('#convertDownload').html('')
+
     $('#errorMessage').text('')
     if(rtttl == null || rtttl.trim() == '') {
         alert('You must have something in the RTTTL to convert!')
@@ -153,14 +156,28 @@ async function convertRtttlToMidi(rtttl) {
         $('#errorMessage').text(message)
         throw new Error("HTTP error converting RTTTL to MIDI: " + response.status)
     }
-    let buffer = await response.arrayBuffer()
-    let file = new File([buffer], 'converted.mid', { type: "application/x-msdownload" })
+    let convertedMidiBuffer = await response.arrayBuffer()
+    let file = new File([convertedMidiBuffer], 'converted.mid', { type: "application/x-msdownload" })
     let url = URL.createObjectURL(file)
     let link = document.createElement("a")
     link.href = url
     link.download = 'converted.mid'
-    link.click()
-    URL.revokeObjectURL(url)
+    link.text = 'MIDI'
+    $('#convertDownload').append(link)
+
+    let convertedMidi = Array.from(new Uint8Array(convertedMidiBuffer), byte => String.fromCharCode(byte)).join("")
+    let smf = new JZZ.MIDI.SMF(convertedMidi);
+    player.load(smf);
+
+    $('#convertResults').show()
+
+}
+
+function downloadConvertedMidi() {
+
+    // link.click()
+    // URL.revokeObjectURL(url)
+
 }
 
 async function fetchMidi(url) {
@@ -223,6 +240,8 @@ async function setUpPage() {
         $('#convertContainer').show()
         let defaultRtttl = "TocattaFugue:d=32,o=5,b=100:a#.,g#.,2a#,g#,f#,f,d#.,4d.,2d#,a#.,g#.,2a#,8f,8f#,8d,2d#,8d,8f,8g#,8b,8d6,4f6,4g#.,4f.,1g,32p"
         $('#rtttlText').val(defaultRtttl)
+        player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: false });    
+        JZZ.synth.Tiny.register('Web Audio');
     } else if (category != null && category != '') {
         getCategoryInfo(category)
         await getTones(category)    

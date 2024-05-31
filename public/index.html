@@ -100,12 +100,25 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <textarea id="rtttlText" class="form-control" style="height:100px;width:100%;"></textarea>
+                                    <textarea id="rtttlText" class="form-control" style="height:100px;width:100%;" onkeypress="$('#convertResults').hide()"></textarea>
                                 </div>
                             </div>
                             <div class="row" style="margin-top:5px;">
-                                <div class="col-sm-12">
+                                <div class="col-md-3">
                                     <a href="javascript:;" onclick="convertRtttlToMidi($('#rtttlText').val());" class="btn btn-primary">Convert to MIDI</a>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="row form-group" style="display:none;" id="convertResults">
+                                        <div class="col-md-3 col-xl-3 bold text-md-right">Preview:</div>
+                                        <div class="col-md-9 col-xl-9">
+                                            <div id="convertPlayer"></div>
+                                        </div>
+                                        <div class="col-md-3 col-xl-3 bold text-md-right">Download:</div>
+                                        <div class="col-md-9 col-xl-9">
+                                            <div id="convertDownload" aria-label="Download"></div>
+                                        </div>
+                                    </div>
+                                            
                                 </div>
                             </div>
                             <div class="row" style="margin-top:10px;" runat="server" id="errorDiv" visible="false">
