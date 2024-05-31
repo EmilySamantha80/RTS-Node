@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
     "log4js": "^6.9.1",
     "mysql2": "^3.9.3"
   }

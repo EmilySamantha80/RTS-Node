@@ -175,13 +175,6 @@ async function convertRtttlToMidi(rtttl) {
 
 }
 
-function downloadConvertedMidi() {
-
-    // link.click()
-    // URL.revokeObjectURL(url)
-
-}
-
 async function fetchMidi(url) {
     let response = await fetch(url)
     if (!response.ok) {

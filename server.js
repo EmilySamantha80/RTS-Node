@@ -1,9 +1,20 @@
 const mysql = require('mysql2/promise')
 const express = require('express')
+const rateLimit  = require("express-rate-limit");
+
 const app = express()
 const Rtttl = require('./rtttl.js')
 const port = process.env.PORT || 3000
 app.use(express.json())
+
+const limiter = rateLimit({
+	windowMs: 1 * 60 * 1000, // 1 minute
+	limit: 60, // Limit each IP to X requests per 'window'
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Redis, Memcached, etc. See below.
+})
+// app.use(limiter) // Globally apply the rate limit
 
 const fs = require("fs");
 
@@ -53,7 +64,7 @@ app.get('/rts/errors', (req, res) => {
   res.sendFile(`${__dirname}/stderr.log`)
 })
 
-app.post('/rts/midi', (req, res) => {
+app.post('/rts/midi', limiter, (req, res) => {
   try {
     let tone = req.body.rtttl;
     let rtttl = Rtttl.parseRtttl(tone)
@@ -73,7 +84,7 @@ app.post('/rts/midi', (req, res) => {
   }
 })
 
-app.get('/rts/midi/:id', (req, res) => {
+app.get('/rts/midi/:id', limiter, (req, res) => {
   getTones(req.params.id).then((result) => {
     try {
       if(result.length > 0) {
