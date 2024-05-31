@@ -128,6 +128,7 @@ async function convertRtttlToMidi(rtttl) {
     $('#convertResults').hide()
     $('#convertDownload').html('')
 
+    $('#errorDiv').hide()
     $('#errorMessage').text('')
     if(rtttl == null || rtttl.trim() == '') {
         alert('You must have something in the RTTTL to convert!')
@@ -153,6 +154,7 @@ async function convertRtttlToMidi(rtttl) {
         } else {
             message = "Unspecified conversion error"
         }
+        $('#errorDiv').show()
         $('#errorMessage').text(message)
         throw new Error("HTTP error converting RTTTL to MIDI: " + response.status)
     }

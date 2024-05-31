@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en-us" role="main">
-    <head runat="server">
+    <head>
         <title>Merwin's Ringtone Search</title>
         <meta name="description" content="Your source for old-school nokia RTTTL ringtones" />
         <meta name="keywords" content="ringtone,nokia,rtttl,midi" />
@@ -121,7 +121,7 @@
                                             
                                 </div>
                             </div>
-                            <div class="row" style="margin-top:10px;" runat="server" id="errorDiv" visible="false">
+                            <div class="row" style="margin-top:10px;display:none" id="errorDiv">
                                 <div class="col-sm-12">
                                     <span style="font-weight:600" class="color-red" id="errorMessage" role="alert" aria-live="assertive"></span>
                                 </div>
@@ -175,7 +175,7 @@
                                 <div class="col-md-6 resultsHeader">
                                     <label id="categoryTitle"></label>
                                 </div>
-                                <div class="col-md-6 text-md-right resultsHeader" runat="server" id="SearchCountDiv">
+                                <div class="col-md-6 text-md-right resultsHeader" id="SearchCountDiv">
                                     <div><label id="searchCount">Found <span id="toneCount"></span> ringtones</label></div>
                                 </div>
                             </div>
