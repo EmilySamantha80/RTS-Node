@@ -32,10 +32,14 @@ function buildToneRow(tones) {
 async function previewMidi(id) {
     let url = `/rts/midi/${id}`
     
-    let response = await fetchMidi(url)
-    let midi = response
-    let smf = new JZZ.MIDI.SMF(midi);
-    player.load(smf);
+    try {
+        let response = await fetchMidi(url)
+        let midi = response
+        let smf = new JZZ.MIDI.SMF(midi);
+        player.load(smf);    
+    } catch {
+        
+    }
 }
 
 async function getTone(id) {
