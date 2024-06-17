@@ -383,6 +383,7 @@ async function searchTones(term) {
       WHERE
         UPPER(Artist) LIKE UPPER(?)
         OR UPPER(Title) LIKE UPPER(?)
+      ORDER BY Artist, Title
     `
     let params = [ `%${term}%`, `%${term}%` ]
     let [rows, fields] = await conn.query(sql, params)

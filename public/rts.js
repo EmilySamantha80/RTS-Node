@@ -1,9 +1,9 @@
-var urlParams = new URLSearchParams(window.location.search);
+var urlParams = new URLSearchParams(window.location.search)
 var player
 
 function doSearch() {
-    var s = document.getElementById('searchText').value;
-    window.location.href = '?search=' + btoa(s);
+    var s = document.getElementById('searchText').value
+    window.location.href = '?search=' + btoa(s)
 }
 
 function buildToneRow(tones) {
@@ -35,10 +35,10 @@ async function previewMidi(id) {
     try {
         let response = await fetchMidi(url)
         let midi = response
-        let smf = new JZZ.MIDI.SMF(midi);
-        player.load(smf);    
+        let smf = new JZZ.MIDI.SMF(midi)
+        player.load(smf)    
     } catch {
-        
+
     }
 }
 
@@ -46,6 +46,7 @@ async function getTone(id) {
     let data = { }
     let url = `/rts/tones/${id}`
     let response = await query(url, 'GET', data)
+    console.log(response)
     $('#detailTitle').text(`${response.Artist} - ${response.Title}`)
     $('#detailViews').text(`${parseInt(response.Counter).toLocaleString()}`)
     $('#detailDownload').html(`
@@ -54,7 +55,7 @@ async function getTone(id) {
         </form>
     `)
     $('#detailRtttl').text(response.Rtttl)
-    document.title = `${document.title} (${response.Artist} - ${response.Title})`
+    document.title = `${response.Artist} - ${response.Title}`
     await previewMidi(response.ToneId)
     $('#toneDetail').show()
 }
@@ -73,7 +74,7 @@ async function getStats() {
     response.forEach(function (value, index) {
         let name = value.StatName.toUpperCase()
         if (name == 'COUNTINGSINCE') {
-            let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
             let date = new Date(value.StatValue)
             $('#countingSince').text(date.toLocaleDateString("en-US", options))
         } else if (name == 'PAGEVIEWS') {
@@ -109,10 +110,12 @@ async function searchTones(search) {
 async function getCategoryInfo(category) {
     if (category == null || category == '') {
         $('#categoryTitle').text(`Top 20 ringtones`)
+        document.title = `Top 20 ringtones`
     } else {
         let data = { }
         response = await query(`/rts/categories/${category}`, 'GET', data)
         $('#categoryTitle').text(`Category: ${response.CategoryName}`)
+        document.title = `${response.CategoryName}`
     }
 }
 
@@ -172,8 +175,8 @@ async function convertRtttlToMidi(rtttl) {
     $('#convertDownload').append(link)
 
     let convertedMidi = Array.from(new Uint8Array(convertedMidiBuffer), byte => String.fromCharCode(byte)).join("")
-    let smf = new JZZ.MIDI.SMF(convertedMidi);
-    player.load(smf);
+    let smf = new JZZ.MIDI.SMF(convertedMidi)
+    player.load(smf)
 
     $('#convertResults').show()
 
@@ -190,7 +193,7 @@ async function fetchMidi(url) {
 }
 
 async function query(url, method, data) {
-    let response;
+    let response
     if (method == 'GET') {
         response = await fetch(
             url,
@@ -201,7 +204,7 @@ async function query(url, method, data) {
                 },
                 method: method,
             }
-        );    
+        )    
     } else {
         response = await fetch(
             url,
@@ -213,10 +216,10 @@ async function query(url, method, data) {
                 method: method,
                 body: JSON.stringify(data),
             }
-        );    
+        )    
     }
     let result = await response.json()
-    return result;
+    return result
 }
 
 async function setUpPage() {
@@ -229,18 +232,12 @@ async function setUpPage() {
     let convert = urlParams.get('convert')
     let toneId = urlParams.get('toneid')
 
-    if (toneId != null && toneId != '') {
-        player = new JZZ.gui.Player({at: 'player', midi: false, file: false });    
-        JZZ.synth.Tiny.register('Web Audio');
-        await getTone(toneId)
-    }
-
     if (convert != null && convert != '') {
         $('#convertContainer').show()
         let defaultRtttl = "TocattaFugue:d=32,o=5,b=100:a#.,g#.,2a#,g#,f#,f,d#.,4d.,2d#,a#.,g#.,2a#,8f,8f#,8d,2d#,8d,8f,8g#,8b,8d6,4f6,4g#.,4f.,1g,32p"
         $('#rtttlText').val(defaultRtttl)
-        player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: false });    
-        JZZ.synth.Tiny.register('Web Audio');
+        player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: false })    
+        JZZ.synth.Tiny.register('Web Audio')
     } else if (category != null && category != '') {
         getCategoryInfo(category)
         await getTones(category)    
@@ -256,6 +253,12 @@ async function setUpPage() {
         getCategoryInfo()
         await getTones() 
     }
+
+    if (toneId != null && toneId != '') {
+        player = new JZZ.gui.Player({at: 'player', midi: false, file: false })    
+        JZZ.synth.Tiny.register('Web Audio')
+        await getTone(toneId)
+    }
 }
 
 $(document).ready(function() {
@@ -268,4 +271,4 @@ $(document).ready(function() {
     setUpPage().then(() => {
        $("#spinnerContainer").hide()
     })
-});
+})
