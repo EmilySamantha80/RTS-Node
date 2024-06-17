@@ -237,7 +237,7 @@ async function setUpPage() {
         $('#convertContainer').show()
         let defaultRtttl = "TocattaFugue:d=32,o=5,b=100:a#.,g#.,2a#,g#,f#,f,d#.,4d.,2d#,a#.,g#.,2a#,8f,8f#,8d,2d#,8d,8f,8g#,8b,8d6,4f6,4g#.,4f.,1g,32p"
         $('#rtttlText').val(defaultRtttl)
-        player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: false })
+        player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: true })
         JZZ.synth.Tiny.register('Web Audio')
     } else if (category != null && category != '') {
         getCategoryInfo(category)
