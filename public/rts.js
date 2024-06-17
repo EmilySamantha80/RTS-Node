@@ -115,7 +115,7 @@ async function getCategoryInfo(category) {
         let data = { }
         response = await query(`/rts/categories/${category}`, 'GET', data)
         $('#categoryTitle').text(`Category: ${response.CategoryName}`)
-        document.title = `${response.CategoryName}`
+        document.title = `${response.CategoryName} ringtones`
     }
 }
 
