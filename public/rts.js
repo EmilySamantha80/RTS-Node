@@ -239,6 +239,10 @@ async function setUpPage() {
         $('#rtttlText').val(defaultRtttl)
         player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: true })
         JZZ.synth.Tiny.register('Web Audio')
+        let hidePlayer=function(e){player.stop();$('#convertResults').hide();$('#errorDiv').hide();}
+        $('#rtttlText').on('keydown', hidePlayer)
+        $('#rtttlText').on('paste', hidePlayer)
+        $('#rtttlText').on('cut', hidePlayer)
     } else if (category != null && category != '') {
         getCategoryInfo(category)
         await getTones(category)    
