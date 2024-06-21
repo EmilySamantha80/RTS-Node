@@ -125,7 +125,7 @@ async function getCategories() {
     let link = `<a class='categoryLink' href='.'>Top 20</a>`
     $("#categories").append(link)
     response.forEach(function (value, index) {
-        let link = `<a class='categoryLink' href='?category=${value.CategoryCode}'>${value.CategoryName}</a>`
+        let link = `<a class='categoryLink' href='?category=${value.CategoryCode}'>${value.CategoryName}</a>&nbsp;`
         $("#categories").append(link)
     })
     $('#categoryContainer').show()
