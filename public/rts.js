@@ -1,5 +1,6 @@
 var urlParams = new URLSearchParams(window.location.search)
 var player
+var playerLoaded = false
 
 function doSearch() {
     var s = document.getElementById('searchText').value
@@ -42,6 +43,8 @@ async function previewMidi(id) {
         }
         player.onSelect = function () {
             $('#playerStatus').hide()
+            player.onPlay = function() {}
+            player.onSelect = function() {}
         }
         player.load(smf)
         JZZ.synth.Tiny.register('Web Audio')
@@ -192,6 +195,8 @@ async function convertRtttlToMidi(rtttl) {
     }
     player.onSelect = function () {
         $('#convertPlayerStatus').hide()
+        player.onPlay = function() {}
+        player.onSelect = function() {}
     }
     player.load(smf)
 
