@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search)
-const useSoundFont = true
+const useSoundFont = false
 const soundFontInstrument = 'acoustic_grand_piano'
 
 function doSearch() {
