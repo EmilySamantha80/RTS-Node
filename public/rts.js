@@ -36,7 +36,15 @@ async function previewMidi(id) {
         let response = await fetchMidi(url)
         let midi = response
         let smf = new JZZ.MIDI.SMF(midi)
-        player.load(smf)    
+        player = new JZZ.gui.Player({at: 'player', midi: false, file: true })
+        player.onPlay = function() {
+            $('#playerStatus').show()
+        }
+        player.onSelect = function () {
+            $('#playerStatus').hide()
+        }
+        player.load(smf)
+        JZZ.synth.Tiny.register('Web Audio')
     } catch {
 
     }
@@ -46,7 +54,7 @@ async function getTone(id) {
     let data = { }
     let url = `/rts/tones/${id}`
     let response = await query(url, 'GET', data)
-    console.log(response)
+    // console.log(response)
     $('#detailTitle').text(`${response.Artist} - ${response.Title}`)
     $('#detailViews').text(`${parseInt(response.Counter).toLocaleString()}`)
     $('#detailDownload').html(`
@@ -177,6 +185,14 @@ async function convertRtttlToMidi(rtttl) {
 
     let convertedMidi = Array.from(new Uint8Array(convertedMidiBuffer), byte => String.fromCharCode(byte)).join("")
     let smf = new JZZ.MIDI.SMF(convertedMidi)
+    player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: true })
+    JZZ.synth.Tiny.register('Web Audio')
+    player.onPlay = function() {
+        $('#convertPlayerStatus').show()
+    }
+    player.onSelect = function () {
+        $('#convertPlayerStatus').hide()
+    }
     player.load(smf)
 
     $('#convertResults').show()
@@ -237,8 +253,6 @@ async function setUpPage() {
         $('#convertContainer').show()
         let defaultRtttl = "TocattaFugue:d=32,o=5,b=100:a#.,g#.,2a#,g#,f#,f,d#.,4d.,2d#,a#.,g#.,2a#,8f,8f#,8d,2d#,8d,8f,8g#,8b,8d6,4f6,4g#.,4f.,1g,32p"
         $('#rtttlText').val(defaultRtttl)
-        player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: true })
-        JZZ.synth.Tiny.register('Web Audio')
         let hidePlayer=function(e){player.stop();$('#convertResults').hide();$('#errorDiv').hide();}
         $('#rtttlText').on('keydown', hidePlayer)
         $('#rtttlText').on('paste', hidePlayer)
@@ -260,8 +274,6 @@ async function setUpPage() {
     }
 
     if (toneId != null && toneId != '') {
-        player = new JZZ.gui.Player({at: 'player', midi: false, file: true })    
-        JZZ.synth.Tiny.register('Web Audio')
         await getTone(toneId)
     }
 }

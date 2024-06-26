@@ -16,9 +16,9 @@
         <link rel="stylesheet" type="text/css" href="styles/bootstrap-overrides.css" />
         <link rel="stylesheet" type="text/css" href="styles/rts.css" />
         <script src="JZZ/JZZ.js"></script>
+        <script src="JZZ/JZZ.gui.Player.js"></script>
         <script src="JZZ/JZZ.midi.SMF.js"></script>
         <script src="JZZ/JZZ.synth.Tiny.js"></script>
-        <script src="JZZ/JZZ.gui.Player.js"></script>
         <script src="rts.js"></script>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-116766922-1"></script>
@@ -112,6 +112,7 @@
                                         <div class="col-md-3 col-xl-3 bold text-md-right">Preview:</div>
                                         <div class="col-md-9 col-xl-9">
                                             <div id="convertPlayer"></div>
+                                            <div id="convertPlayerStatus" style="display:none;font-weight:bold;" role="alert" aria-live="assertive">Initializing MIDI device...</div>
                                         </div>
                                         <div class="col-md-3 col-xl-3 bold text-md-right">Download:</div>
                                         <div class="col-md-9 col-xl-9">
@@ -151,6 +152,7 @@
                                 <div class="col-md-3 col-xl-2 bold text-md-right">Preview:</div>
                                 <div class="col-md-9 col-xl-10">
                                     <div id="player"></div>
+                                    <div id="playerStatus" style="display:none;font-weight:bold;" role="alert" aria-live="assertive">Initializing MIDI device...</div>
                                 </div>
                                 <div class="col-md-3 col-xl-2 bold text-md-right">Download:</div>
                                 <div class="col-md-9 col-xl-10">
