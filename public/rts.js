@@ -1,6 +1,6 @@
-var urlParams = new URLSearchParams(window.location.search)
-var player
-var playerLoaded = false
+const urlParams = new URLSearchParams(window.location.search)
+const useSoundFont = true
+const soundFontInstrument = 'acoustic_grand_piano'
 
 function doSearch() {
     var s = document.getElementById('searchText').value
@@ -37,9 +37,12 @@ async function previewMidi(id) {
         let response = await fetchMidi(url)
         let midi = response
         let smf = new JZZ.MIDI.SMF(midi)
-        player = new JZZ.gui.Player({at: 'player', midi: false, file: true })
-        JZZ.synth.MIDIjs.register({ soundfontUrl: "./JZZ/soundfont/", instrument: "acoustic_grand_piano" })
-        // JZZ.synth.Tiny.register('Web Audio')
+        var player = new JZZ.gui.Player({at: 'player', midi: false, file: true })
+        if (useSoundFont == true) {
+            JZZ.synth.MIDIjs.register({ soundfontUrl: "./JZZ/soundfont/", instrument: soundFontInstrument })
+        } else {
+            JZZ.synth.Tiny.register('Web Audio')
+        }
         player.onPlay = function() {
             $('#playerStatus').show()
         }
@@ -189,9 +192,12 @@ async function convertRtttlToMidi(rtttl) {
 
     let convertedMidi = Array.from(new Uint8Array(convertedMidiBuffer), byte => String.fromCharCode(byte)).join("")
     let smf = new JZZ.MIDI.SMF(convertedMidi)
-    player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: true })
-    JZZ.synth.MIDIjs.register({ soundfontUrl: "./JZZ/soundfont/", instrument: "acoustic_grand_piano" })
-    // JZZ.synth.Tiny.register('Web Audio')
+    var player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: true })
+    if (useSoundFont == true) {
+        JZZ.synth.MIDIjs.register({ soundfontUrl: "./JZZ/soundfont/", instrument: soundFontInstrument })
+    } else {
+        JZZ.synth.Tiny.register('Web Audio')
+    }
     player.onPlay = function() {
         $('#convertPlayerStatus').show()
     }
