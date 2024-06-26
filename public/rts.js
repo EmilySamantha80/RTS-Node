@@ -38,6 +38,8 @@ async function previewMidi(id) {
         let midi = response
         let smf = new JZZ.MIDI.SMF(midi)
         player = new JZZ.gui.Player({at: 'player', midi: false, file: true })
+        JZZ.synth.MIDIjs.register({ soundfontUrl: "./JZZ/soundfont/", instrument: "acoustic_grand_piano" })
+        // JZZ.synth.Tiny.register('Web Audio')
         player.onPlay = function() {
             $('#playerStatus').show()
         }
@@ -47,7 +49,6 @@ async function previewMidi(id) {
             player.onSelect = function() {}
         }
         player.load(smf)
-        JZZ.synth.Tiny.register('Web Audio')
     } catch {
 
     }
@@ -189,7 +190,8 @@ async function convertRtttlToMidi(rtttl) {
     let convertedMidi = Array.from(new Uint8Array(convertedMidiBuffer), byte => String.fromCharCode(byte)).join("")
     let smf = new JZZ.MIDI.SMF(convertedMidi)
     player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: true })
-    JZZ.synth.Tiny.register('Web Audio')
+    JZZ.synth.MIDIjs.register({ soundfontUrl: "./JZZ/soundfont/", instrument: "acoustic_grand_piano" })
+    // JZZ.synth.Tiny.register('Web Audio')
     player.onPlay = function() {
         $('#convertPlayerStatus').show()
     }
