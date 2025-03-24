@@ -38,7 +38,7 @@ CREATE TABLE `Stats` (
 
 INSERT INTO `Stats` (`StatName`, `StatValue`) VALUES
 ('CountingSince', '2001-12-04'),
-('PageViews', '6368384');
+('PageViews', '6375230');
 
 --
 -- Indexes for dumped tables
