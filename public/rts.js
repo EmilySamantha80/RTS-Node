@@ -190,6 +190,7 @@ async function convertRtttlToMidi(rtttl) {
     link.text = 'MIDI'
     $('#convertDownload').append(link)
 
+    $("#convertPlayer").empty()
     let convertedMidi = Array.from(new Uint8Array(convertedMidiBuffer), byte => String.fromCharCode(byte)).join("")
     let smf = new JZZ.MIDI.SMF(convertedMidi)
     var player = new JZZ.gui.Player({at: 'convertPlayer', midi: false, file: true })
